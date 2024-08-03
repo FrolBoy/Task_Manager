@@ -1,6 +1,6 @@
 namespace Task_Manager.Interfaces;
 
-public interface IEnumerable
+public interface IIdentifible
 {
     public int Id
     {

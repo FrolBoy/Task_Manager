@@ -2,9 +2,11 @@ using Task_Manager.Interfaces;
 
 namespace Task_Manager.Repositories;
 
-public abstract class AbstractRepo<T> : IGenericInMemoryRepo<T> where T : class, IEnumerable, new()
+public abstract class AbstractRepo<T> : IGenericInMemoryRepo<T> where T : class, IIdentifible, new()
 {
-    public Task<List<T>> GetAllAsync()
+    
+
+    public Task<IEnumerable<T>> GetAllAsync()
     {
         throw new NotImplementedException();
     }
