@@ -4,7 +4,7 @@ using Task_Manager.Database;
 
 namespace Task_Manager.Repositories;
 
-public abstract class AbstractRepo<T> : IGenericInMemoryRepo<T> where T : class, IIdentifible, new()
+public abstract class AbstractRepo<T> : IGenericInMemoryRepo<T> where T : class, IIdentifiable, new()
 {
     protected readonly ApplicationDbContext _context;
 
@@ -13,7 +13,7 @@ public abstract class AbstractRepo<T> : IGenericInMemoryRepo<T> where T : class,
         _context = context;
     }
 
-    public async Task<IEnumerable<T>> GetAllAsync()
+    public async Task<List<T>> GetAllAsync()
     {
         return await _context.Set<T>().ToListAsync();
     }
@@ -24,18 +24,40 @@ public abstract class AbstractRepo<T> : IGenericInMemoryRepo<T> where T : class,
         return await _context.Set<T>().FindAsync(id);
     }
 
-    public Task CreateAsync(T entity)
+   public async Task<int> CreateAsync(T entity)
+      {
+              await _context.Set<T>().AddAsync(entity);
+              return await _context.SaveChangesAsync();
+      }
+
+    public async Task<bool> UpdateAsync(int id, T entity)
     {
-        throw new NotImplementedException();
+        var existingEntity = await _context.Set<T>().FindAsync(id);
+        if (existingEntity == null)
+        {
+            return false;
+        }
+
+        _context.Entry(existingEntity).CurrentValues.SetValues(entity);
+        await _context.SaveChangesAsync();
+        return true;
     }
 
-    public Task UpdateAsync(T entity)
+    public async Task<bool> DeleteAsync(int id)
     {
-        throw new NotImplementedException();
+        var removable = await _context.Set<T>().FindAsync(id);
+        if (removable == null)
+        {
+            return false;
+        }
+
+        _context.Set<T>().Remove(removable);
+        await _context.SaveChangesAsync();
+        return true;
     }
 
-    public Task DeleteAsync(T entity)
+    public async Task<int> SaveChanges()
     {
-        throw new NotImplementedException();
+        return await _context.SaveChangesAsync();
     }
 }

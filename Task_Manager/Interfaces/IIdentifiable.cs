@@ -1,6 +1,6 @@
 namespace Task_Manager.Interfaces;
 
-public interface IIdentifible
+public interface IIdentifiable
 {
     public int Id
     {

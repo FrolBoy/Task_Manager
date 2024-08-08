@@ -2,9 +2,10 @@ namespace Task_Manager.Interfaces;
 
 public interface IGenericInMemoryRepo<T>
 { 
-    Task<IEnumerable<T>> GetAllAsync();
+    Task<List<T>> GetAllAsync();
     Task<T> GetByIdAsync(int id);
-    Task CreateAsync(T entity);
-    Task UpdateAsync(T entity);
-    Task DeleteAsync(T entity);
+    Task<int> CreateAsync(T entity);
+    Task<bool> UpdateAsync(int id, T entity);
+    Task<bool> DeleteAsync(int id);
+    Task<int> SaveChanges();
 }
